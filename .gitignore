@@ -1,5 +1,5 @@
-# Object file
-*.o
+# Build results
+build/
 
-# Ada Library Information
-*.ali
+# Visual Studio Code cache/options directory
+.vs/
