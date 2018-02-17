@@ -1,6 +1,6 @@
 truffle-debug-example
 =====================
-As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction.  This project contains examples of different errors that will require the use of the debugger to fix.
+As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction.  This project contains examples of different errors that will require the use of the debugger to locate and fix.
 
 Assumptions:
 ------------
@@ -10,23 +10,35 @@ Assumptions:
 
 Usage:
 ------
-1. Open a terminal and navigate to where this project is cloned
+> Open a terminal and navigate to where this project is cloned.
+> 
+> For the following commands, interact directly with the terminal:
+>
+> `...\truffle-debug-example>`
 
-1. Type `truffle compile`
+1. Truffle will compile and build the contracts in the /contracts/ directory.
 
-    Truffle will compile and build the contracts in the /contracts/ directory.
+    Input:
     ```
-    PS ...\truffle-debug-example> truffle compile
+     truffle compile
+    ```
+
+    Output:
+    ```
     Compiling .\contracts\Migrations.sol...
     Compiling .\contracts\Store.sol...
     Writing artifacts to .\build\contracts
     ```
 
-1. Type `truffle develop`
-
-    Truffle has a built-in development blockchain that can be used to locally test contracts.  
+1. Truffle has a built-in development blockchain that can be used to locally test contracts. 
+    
+    Input:
     ```
-    PS ...\truffle-debug-example> truffle develop
+    truffle develop
+    ```
+
+    Output:
+    ```
     Truffle Develop started at http://localhost:9545/
 
     Accounts:
@@ -57,11 +69,19 @@ Usage:
     ```
     *Note: The Accounts and Private Keys will vary. (Never use any of this on the mainnet!)*
 
-1. Type `migrate`
+> For the following commands, interact with the Truffle development shell:
+> 
+> `truffle(develop)>`
 
-    Truffle will deploy the contracts to the local development blockchain.
+1. Truffle will deploy the contracts to the local development blockchain.
+
+    Input:
     ```
-    truffle(develop)> migrate
+    migrate
+    ```
+
+    Output:
+    ```
     Using network 'develop'.
 
     Running migration: 1_initial_migration.js
@@ -81,19 +101,27 @@ Usage:
     ```
     *Note: The hashes will vary. (Never use any of this on the mainnet!)*
 
-1. Type `SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});`
+1. This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.
 
-    This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.
+    Input:
     ```javascript
-    truffle(develop)> SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});
+    SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});
+    ```
+
+    Output:
+    ```javascript
     0
     ```
 
-1. Type `SimpleStorage.deployed().then((instance)=>{return instance.set(4);});`
-
-    This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.
+1.  This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.
+    
+    Input:
     ```javascript
-    truffle(develop)> SimpleStorage.deployed().then((instance)=>{return instance.set(4);});
+    SimpleStorage.deployed().then((instance)=>{return instance.set(4);});
+    ```
+
+    Output:
+    ```javascript
     { tx: '0x8a7d3343dd2aaa0438157faae678ca57cc6485825bb4ed2ebefe90609dd268ce',
       receipt:
         { transactionHash: '0x8a7d3343dd2aaa0438157faae678ca57cc6485825bb4ed2ebefe90609dd268ce',
