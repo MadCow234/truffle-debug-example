@@ -84,7 +84,7 @@ Usage:
 1. Type `SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});`
 
     This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.
-    ```
+    ```javascript
     truffle(develop)> SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});
     0
     ```
@@ -92,7 +92,7 @@ Usage:
 1. Type `SimpleStorage.deployed().then((instance)=>{return instance.set(4);});`
 
     This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.
-    ```
+    ```javascript
     truffle(develop)> SimpleStorage.deployed().then((instance)=>{return instance.set(4);});
     { tx: '0x8a7d3343dd2aaa0438157faae678ca57cc6485825bb4ed2ebefe90609dd268ce',
       receipt:
