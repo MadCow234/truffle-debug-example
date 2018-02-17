@@ -1,25 +1,32 @@
 truffle-debug-example
 =====================
+As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction.  This project contains examples of different errors that will require the use of the debugger to fix.
 
 Assumptions:
 ------------
 1. Familiarity with [Truffle Framework](http://truffleframework.com/)
-1. Truffle 4.0 or newer installed
+1. Truffle 4.0 or newer has been installed
 1. This repository has been cloned
 
-Usage (Explanations below):
----------------------------
+Usage:
+------
 1. Open a terminal and navigate to where this project is cloned
+
 1. Type `truffle compile`
+
+    Truffle will compile and build the contracts in the /contracts/ directory.
     ```
-    > truffle compile
+    PS ...\truffle-debug-example> truffle compile
     Compiling .\contracts\Migrations.sol...
     Compiling .\contracts\Store.sol...
     Writing artifacts to .\build\contracts
     ```
+
 1. Type `truffle develop`
+
+    Truffle has a built-in development blockchain that can be used to locally test contracts.  
     ```
-    > truffle develop
+    PS ...\truffle-debug-example> truffle develop
     Truffle Develop started at http://localhost:9545/
 
     Accounts:
@@ -49,7 +56,10 @@ Usage (Explanations below):
     Mnemonic: candy maple cake sugar pudding cream honey rich smooth crumble sweet treat
     ```
     *Note: The Accounts and Private Keys will vary. (Never use any of this on the mainnet!)*
+
 1. Type `migrate`
+
+    Truffle will deploy the contracts to the local development blockchain.
     ```
     truffle(develop)> migrate
     Using network 'develop'.
@@ -70,12 +80,18 @@ Usage (Explanations below):
     Saving artifacts...
     ```
     *Note: The hashes will vary. (Never use any of this on the mainnet!)*
+
 1. Type `SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});`
+
+    This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.
     ```
     truffle(develop)> SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});
     0
     ```
+
 1. Type `SimpleStorage.deployed().then((instance)=>{return instance.set(4);});`
+
+    This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.
     ```
     truffle(develop)> SimpleStorage.deployed().then((instance)=>{return instance.set(4);});
     { tx: '0x8a7d3343dd2aaa0438157faae678ca57cc6485825bb4ed2ebefe90609dd268ce',
