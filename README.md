@@ -16,7 +16,7 @@ Usage:
 >
 > `...\truffle-debug-example>`
 
-1. Truffle will compile and build the contracts in the /contracts/ directory.
+1. Truffle will easily compile and build the contracts in the /contracts/ directory using this command.
 
     Input:
     ```
@@ -30,7 +30,7 @@ Usage:
     Writing artifacts to .\build\contracts
     ```
 
-1. Truffle has a built-in development blockchain that can be used to locally test contracts. 
+1. Truffle has a built-in development blockchain that can be used to locally test contracts.  Initialize the local blockhain and launch the Truffle development interactive shell with this command.
     
     Input:
     ```
@@ -73,7 +73,7 @@ Usage:
 > 
 > `truffle(develop)>`
 
-1. Truffle will deploy the contracts to the local development blockchain.
+1. This command will have Truffle deploy the peviously compiled contracts to the local development blockchain.
 
     Input:
     ```
@@ -101,7 +101,7 @@ Usage:
     ```
     *Note: The hashes will vary. (Never use any of this on the mainnet!)*
 
-1. This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.
+1. This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.  Notice that the value returned is `0` (even though it is not initialized in the contract code) since Solidity automatically initializes integer types with a value of zero.
 
     Input:
     ```javascript
@@ -113,7 +113,7 @@ Usage:
     0
     ```
 
-1.  This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.
+1.  This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.  The output shows information regarding the transaction.  The important part for debugging is the transaction hash, returned both as `tx:` and `transactionHash:`.
     
     Input:
     ```javascript
@@ -134,4 +134,16 @@ Usage:
           logs: [],
           status: 1 },
         logs: [] }
+    ```
+
+1. Call the `get()` function again and notice that the value returned is now `4`.
+
+    Input:
+    ```javascript
+    SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});
+    ```
+
+    Output:
+    ```javascript
+    4
     ```
