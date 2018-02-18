@@ -1,6 +1,6 @@
 truffle-debug-example
 =====================
-As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction.  This project contains examples of different errors that will require the use of the debugger to locate and fix.
+As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction. This project contains examples of different errors that will require the use of the debugger to locate and fix.
 
 Assumptions:
 ------------
@@ -30,7 +30,8 @@ Usage:
     Writing artifacts to .\build\contracts
     ```
 
-1. Truffle has a built-in development blockchain that can be used to locally test contracts.  Initialize the local blockhain and launch the Truffle development interactive shell with this command.
+1. Truffle has a built-in development blockchain that can be used to locally test contracts. Initialize the local blockhain and launch the Truffle development interactive shell with this command.  
+*Note: The Accounts and Private Keys will vary. (Never use any of this on the mainnet!)*
     
     Input:
     ```
@@ -67,13 +68,13 @@ Usage:
 
     Mnemonic: candy maple cake sugar pudding cream honey rich smooth crumble sweet treat
     ```
-    *Note: The Accounts and Private Keys will vary. (Never use any of this on the mainnet!)*
 
 > For the following commands, interact with the Truffle development shell:
 > 
 > `truffle(develop)>`
 
-1. This command will have Truffle deploy the peviously compiled contracts to the local development blockchain.
+1. This command will have Truffle deploy the peviously compiled contracts to the local development blockchain.  
+*Note: The hashes will vary. (Never use any of this on the mainnet!)*
 
     Input:
     ```
@@ -99,9 +100,9 @@ Usage:
     ... 0xf36163615f41ef7ed8f4a8f192149a0bf633fe1a2398ce001bf44c43dc7bdda0
     Saving artifacts...
     ```
-    *Note: The hashes will vary. (Never use any of this on the mainnet!)*
 
-1. This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside.  The output is returned and converted to a number.  Notice that the value returned is `0` (even though it is not initialized in the contract code) since Solidity automatically initializes integer types with a value of zero.
+1. This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside. The output is returned and converted to a number. Notice that the value returned is `0` (even though it is not initialized in the contract code) since Solidity automatically initializes integer types with a value of zero.  
+*Note: The `get()` command will be used multiple times throughout the remainder of this example.*
 
     Input:
     ```javascript
@@ -113,8 +114,9 @@ Usage:
     0
     ```
 
-1.  This command calls the `set()` function with a value of `4`.  The `set()` function is the 'clean' function that will work without error and as intended.  The output shows information regarding the transaction.  The important part for debugging is the transaction hash, returned both as `tx:` and `transactionHash:`.
-    
+1.  This command calls the `set()` function with a value of `4`. The `set()` function is the 'clean' function that will work without error and as intended. The output shows information regarding the transaction.  
+*Note: Notice the transaction hash, returned both as `tx` and `transactionHash`. This is necessary for debugging in the following sections.*
+
     Input:
     ```javascript
     SimpleStorage.deployed().then((instance)=>{return instance.set(4);});
@@ -147,3 +149,7 @@ Usage:
     ```javascript
     4
     ```
+
+1. These steps have first shown how to compile, build, and deploy this project to a local development blockchain that is built-in to the Truffle framework. Then the `get()` command was called to show that the number stored on the blockchain has been initialized to `0`. Next, the `set()` command was called with a value of `4`. Finally, the `get` command was again called to show that the number stored on the blockchain was correctly changed to `4`.
+
+1. The following section will explain how to step through problematic code using Truffle's transaction debugger.
