@@ -4,7 +4,7 @@ pragma solidity ^0.4.17;
  *  A simple contract that stores a number.
  */
 contract SimpleStorage {
-    // Integer types are automatically populated with a value of 0 in Solidity.
+    // Integer types are automatically initialized with a value of 0 in Solidity.
     uint storedNum;
 
     /**
