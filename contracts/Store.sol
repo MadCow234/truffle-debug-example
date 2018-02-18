@@ -28,6 +28,18 @@ contract SimpleStorage {
 
     /**
      *  Sets the currently stored number.
+     *  Note: This method produces an "invalid opcode" error on any number other than 0.
+     *
+     *  @param input The number to be stored.
+     */
+    function setInvalidOpcode(uint input) public {
+        // Require that the stored number can only be 0.
+        assert(input == 0);
+        storedNum = input;
+    }
+
+    /**
+     *  Sets the currently stored number.
      *  Note: This method produces an "out of gas" error due to an infinite loop.
      *
      *  @param input The number to be stored.
@@ -37,18 +49,6 @@ contract SimpleStorage {
         while (true) {
             storedNum = input;
         }
-    }
-
-    /**
-     *  Sets the currently stored number.
-     *  Note: This method produces an "invalid opcode" error on any number other than 0.
-     *
-     *  @param input The number to be stored.
-     */
-    function setInvalidOpcode(uint input) public {
-        // Require that the stored number can only be 0.
-        assert(input == 0);
-        storedNum = input;
     }
     
     event Odd();   // An odd number has been stored.    
