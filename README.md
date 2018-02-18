@@ -102,7 +102,7 @@ Usage:
     ```
 
 1. This command looks for the SimpleStorage contract on the local blockchain and calls the `get()` function that is defined inside. The output is returned and converted to a number. Notice that the value returned is `0` (even though it is not initialized in the contract code) since Solidity automatically initializes integer types with a value of zero.  
-*Note: The `get()` command will be used multiple times throughout the remainder of this example.*
+*Note: The `get()` function will be used multiple times throughout the remainder of this example.*
 
     Input:
     ```javascript
@@ -114,8 +114,8 @@ Usage:
     0
     ```
 
-1.  This command calls the `set()` function with a value of `4`. The `set()` function is the 'clean' function that will work without error and as intended. The output shows information regarding the transaction.  
-*Note: Notice the transaction hash, returned both as `tx` and `transactionHash`. This is necessary for debugging in the following sections.*
+1.  This command calls the `set()` function with a value of `4`. The `set()` function is the 'clean' function that will work without error and as intended. Since there was no error, the output shows information regarding the transaction.  
+*Note: Notice the transaction hash, returned both as `tx` and `transactionHash`. When debugging issues in the following sections, the hashes for those transactions will be required.*
 
     Input:
     ```javascript
@@ -152,4 +152,4 @@ Usage:
 
 1. These steps have first shown how to compile, build, and deploy this project to a local development blockchain that is built-in to the Truffle framework. Then the `get()` command was called to show that the number stored on the blockchain has been initialized to `0`. Next, the `set()` command was called with a value of `4`. Finally, the `get` command was again called to show that the number stored on the blockchain was correctly changed to `4`.
 
-1. The following section will explain how to step through problematic code using Truffle's transaction debugger.
+1. The following sections will explain how to step through problematic code using Truffle's transaction debugger.
