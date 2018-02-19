@@ -114,7 +114,7 @@ Usage:
     0
     ```
 
-1.  This command calls the `set()` function with a value of `4`. The `set()` function is the 'clean' function that will work without error and as intended. Since there was no error, the output shows information regarding the transaction.  
+1. This command calls the `set()` function with a value of `4`. The `set()` function is the 'clean' function that will work without error and as intended. Since there was no error, the output shows information regarding the transaction.  
 *Note: Notice the transaction hash, returned both as `tx` and `transactionHash`. When debugging issues in the following sections, the hashes for those transactions will be required.*
 
     Input:
@@ -153,3 +153,67 @@ Usage:
 1. These steps have first shown how to compile, build, and deploy this project to a local development blockchain that is built-in to the Truffle framework. Then the `get()` command was called to show that the number stored on the blockchain has been initialized to `0`. Next, the `set()` command was called with a value of `4`. Finally, the `get` command was again called to show that the number stored on the blockchain was correctly changed to `4`.
 
 1. The following sections will explain how to step through problematic code using Truffle's transaction debugger.
+
+Debugging Issues:
+-----------------
+
+> For the following commands, continue to interact with the Truffle development shell:
+> 
+> `truffle(develop)>`
+
+### Issue 1: Invalid Opcode
+
+1. This command calls the `setInvalidOpcode()` function with a value of `0`. The `setInvalidOpcode()` function throws an error on any value other than `0`. Since the function is called with a value of `0`, there was no error, and the output shows information regarding the transaction.  
+
+    Input:
+    ```javascript
+    SimpleStorage.deployed().then((instance)=>{return instance.setInvalidOpcode(0);});
+    ```
+
+    Output:
+    ```
+    { tx: '0x8e2e8dcb787c45f43a772e25b697f2d9b72731faf1a878be9c1969d59e3c7512',
+      receipt:
+        { transactionHash: '0x8e2e8dcb787c45f43a772e25b697f2d9b72731faf1a878be9c1969d59e3c7512',
+          transactionIndex: 0,
+          blockHash: '0x8012074814f3c5f55ee03d22f4215c26aea080a2b3b0740e145292d4029f6232',
+          blockNumber: 6,
+          gasUsed: 13326,
+          cumulativeGasUsed: 13326,
+          contractAddress: null,
+          logs: [],
+          status: 1 },
+        logs: [] }
+    ```
+
+1. Call the `get()` function again and notice that the value returned is now `0`.
+
+    Input:
+    ```javascript
+    SimpleStorage.deployed().then((instance)=>{return instance.get.call();}).then((value)=>{return value.toNumber()});
+    ```
+
+    Output:
+    ```javascript
+    0
+    ```
+
+1. Call the `setInvalidOpcode()` function once again, but now with a value of `4`. Since the function is called with a value other than `0`, the output shows information regarding the error that was encountered.  
+*Note: Notice that the error output does not contain the transaction hash needed for debugging the issue, hence why the debugger logs are needed.*
+
+    Input:
+    ```javascript
+    SimpleStorage.deployed().then((instance)=>{return instance.setInvalidOpcode(4);});
+    ```
+
+    Output:
+    ```
+    Error: VM Exception while processing transaction: invalid opcode
+    at XMLHttpRequest._onHttpResponseEnd (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:509:1)
+    at XMLHttpRequest._setReadyState (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:354:1)
+    at XMLHttpRequestEventTarget.dispatchEvent (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:64:1)
+    at XMLHttpRequest.request.onreadystatechange (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\httpprovider.js:128:1)
+    at ...\npm\node_modules\truffle\build\webpack:\~\truffle-provider\wrapper.js:134:1
+    at ...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\requestmanager.js:86:1
+    at Object.InvalidResponse (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\errors.js:38:1)
+    ```
