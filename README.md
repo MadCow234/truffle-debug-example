@@ -157,6 +157,14 @@ Usage:
 Debugging Issues:
 -----------------
 
+> To assist debugging, attach to the Truffle development logging output:
+>
+> 1. Open a second terminal alongside the Truffle development shell
+> 1. Navigate to where this project is cloned
+> 1. Input: `truffle develop --log`
+> 1. Output: `Connected to existing Truffle Develop session at http://localhost:9545/`
+> 1. This terminal will now receive Truffle development logging output
+
 > For the following commands, continue to interact with the Truffle development shell:
 > 
 > `truffle(develop)>`
