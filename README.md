@@ -157,7 +157,7 @@ Usage:
 Debugging Issues:
 -----------------
 
-> To assist debugging, attach to the Truffle development logging output:
+> To assist debugging, attach a terminal to the Truffle development logging output:
 >
 > 1. Open a second terminal alongside the Truffle development shell
 > 1. Navigate to where this project is cloned
@@ -179,7 +179,7 @@ Debugging Issues:
     ```
 
     Output:
-    ```
+    ```javascript
     { tx: '0x8e2e8dcb787c45f43a772e25b697f2d9b72731faf1a878be9c1969d59e3c7512',
       receipt:
         { transactionHash: '0x8e2e8dcb787c45f43a772e25b697f2d9b72731faf1a878be9c1969d59e3c7512',
@@ -207,7 +207,7 @@ Debugging Issues:
     ```
 
 1. Call the `setInvalidOpcode()` function once again, but now with a value of `4`. Since the function is called with a value other than `0`, the output shows information regarding the error that was encountered.  
-*Note: Notice that the error output does not contain the transaction hash needed for debugging the issue, hence why the debugger logs are needed.*
+*Note: Notice that the error output does not contain the transaction hash needed for debugging the issue, hence why the Truffle development logging output is needed.*
 
     Input:
     ```javascript
@@ -224,4 +224,355 @@ Debugging Issues:
     at ...\npm\node_modules\truffle\build\webpack:\~\truffle-provider\wrapper.js:134:1
     at ...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\requestmanager.js:86:1
     at Object.InvalidResponse (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\errors.js:38:1)
+    ```
+
+1. Return to the terminal that is attached to the Truffle development logging output (henceforth referred to as "the log terminal"). The log terminal now contains some lines of information regarding the transaction. Notice the transaction hash that is required for debugging is logged here, on the third line. Copy this transaction hash.  
+*Note: The hashes will vary. (Never use any of this on the mainnet!)*  
+*Note: Notice that the seventh line contains information about the error that ocurred during the transaction.*
+
+    Output:
+    ```
+    develop:testrpc eth_sendTransaction +0ms
+    develop:testrpc  +21ms
+    develop:testrpc   Transaction: 0x7e95505197154a02ee2fd47f1c056062d245aba43c7ca05a1e7eeeb60efff9db +1ms
+    develop:testrpc   Gas usage: 6721975 +0ms
+    develop:testrpc   Block Number: 5 +0ms
+    develop:testrpc   Block Time: Fri Feb 23 2018 14:13:25 GMT-0600 (Central Standard Time) +0ms
+    develop:testrpc   Runtime Error: invalid opcode +0ms
+    develop:testrpc  +0ms
+    ```
+
+1. Return to the `truffle(develop)>` terminal, type `debug`, press **Spacebar**, paste the transaction hash that was copied from the log terminal, and press **Enter**. This will launch the Truffle debug interactive shell and begin by pointing to the first instruction executed by the transaction. In this case, and in most cases, the first instruction is the contract declaration. At the beginning of this instruction is a number that denotes the line number in the contract's source code where the instruction is declared. In this case, the Simple Storage contract is declared on line 6 of the *Store.sol* source code file.  
+*Note: The addresses will vary. (Never use any of this on the mainnet!)*  
+*Note: The development shell is still active underneath the debug shell and will return when debugging is complete.*
+
+    Input:
+    ```
+    debug 0x7e95505197154a02ee2fd47f1c056062d245aba43c7ca05a1e7eeeb60efff9db
+    ```
+
+    Output:
+    ```
+    Note: This feature's in beta. Please discuss any issues you find in our Gitter channel!
+    https://gitter.im/ConsenSys/truffle
+
+    Gathering transaction data...
+
+    Addresses affected:
+    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+
+    Commands:
+    (enter) last command entered (step next)
+    (o) step over, (i) step into, (u) step out, (n) step next
+    (;) step instruction, (p) print instruction, (h) print this help, (q) quit
+
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    6: contract SimpleStorage {
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+    ```
+
+1. Press **Enter** again to step to the next instruction.
+
+    Output:
+    ```
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    35:     function setInvalidOpcode(uint input) public {
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ```
+
+1. Press **Enter** a few more times until the debugger halts with an error message. The full debugging output is printed below. Notice that the debugger halted immediately after evaluating this code: `assert(input == 0);`. Therefore, this is the offending code that needs to be fixed.
+
+    Output:
+    ```
+    Note: This feature's in beta. Please discuss any issues you find in our Gitter channel!
+    https://gitter.im/ConsenSys/truffle
+
+    Gathering transaction data...
+
+    Addresses affected:
+    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+
+    Commands:
+    (enter) last command entered (step next)
+    (o) step over, (i) step into, (u) step out, (n) step next
+    (;) step instruction, (p) print instruction, (h) print this help, (q) quit
+
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    6: contract SimpleStorage {
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x7e955051...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    35:     function setInvalidOpcode(uint input) public {
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x7e955051...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    37:         assert(input == 0);
+                                ^
+
+    debug(develop:0x7e955051...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    37:         assert(input == 0);
+                       ^^^^^
+
+    debug(develop:0x7e955051...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    37:         assert(input == 0);
+                       ^^^^^^^^^^
+
+    debug(develop:0x7e955051...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    37:         assert(input == 0);
+                ^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x7e955051...)>
+
+    Transaction halted with a RUNTIME ERROR.
+
+    This is likely due to an intentional halting expression, like assert(), require() or revert(). It can also be due to out-of-gas exceptions. Please inspect your transaction parameters and contract code to determine the meaning of this error.
+    ```
+
+### Issue 2: Out-of-gas
+
+1. This command calls the `setOutOfGas()` function which contains an infinate loop. Calling this function will cause the transaction to use all of the allocated gas (which can be expensive) and will result in the code never executing. Notice that again, the output shows information regarding the error that was encountered and does not contain the transaction hash.
+
+    Input:
+    ```javascript
+    SimpleStorage.deployed().then((instance)=>{return instance.setOutOfGas(4);});
+    ```
+
+    Output:
+    ```
+    Error: VM Exception while processing transaction: out of gas
+        at XMLHttpRequest._onHttpResponseEnd (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:509:1)
+        at XMLHttpRequest._setReadyState (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:354:1)
+        at XMLHttpRequestEventTarget.dispatchEvent (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:64:1)
+        at XMLHttpRequest.request.onreadystatechange (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\httpprovider.js:128:1)
+        at ...\npm\node_modules\truffle\build\webpack:\~\truffle-provider\wrapper.js:134:1
+        at ..\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\requestmanager.js:86:1
+        at Object.InvalidResponse (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\errors.js:38:1)
+    ```
+
+1. Return to the log terminal and again, copy the transaction hash.  
+*Note: The hashes will vary. (Never use any of this on the mainnet!)*  
+*Note: Notice that the seventh line contains information about the error that ocurred during the transaction.*
+
+    ```
+    develop:testrpc eth_sendTransaction +40m
+    develop:testrpc  +2s
+    develop:testrpc   Transaction: 0xb03bb4f8bd6c72d0b96173de7461528f9b30a3fd86abfe7b2803ec144ac5a0d3 +0ms
+    develop:testrpc   Gas usage: 6721975 +1ms
+    develop:testrpc   Block Number: 6 +0ms
+    develop:testrpc   Block Time: Fri Feb 23 2018 15:20:44 GMT-0600 (Central Standard Time) +0ms
+    develop:testrpc   Runtime Error: out of gas +0ms
+    develop:testrpc  +0ms
+    ```
+
+1. Return to the `truffle(develop)>` terminal and debug the transaction using the transaction hash that was copied from the log terminal.
+
+    Input:
+    ```
+    debug 0xb03bb4f8bd6c72d0b96173de7461528f9b30a3fd86abfe7b2803ec144ac5a0d3
+    ```
+
+    Output:
+    ```
+    Note: This feature's in beta. Please discuss any issues you find in our Gitter channel!
+    https://gitter.im/ConsenSys/truffle
+
+    Gathering transaction data...
+
+    Addresses affected:
+    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+
+    Commands:
+    (enter) last command entered (step next)
+    (o) step over, (i) step into, (u) step out, (n) step next
+    (;) step instruction, (p) print instruction, (h) print this help, (q) quit
+
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    6: contract SimpleStorage {
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+    ```
+
+1. Press **Enter** many times until it is painfully clear that the same instructions are being called over and over again during this transaction. Notice that the code continually tries to set the input, `storedNum = input`, due to the loop's condition always being true, `while (true)`.  Therefore, this is the offending code that needs to be fixed.
+
+    Output:
+    ```
+    Note: This feature's in beta. Please discuss any issues you find in our Gitter channel!
+    https://gitter.im/ConsenSys/truffle
+
+    Gathering transaction data...
+
+    Addresses affected:
+    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+
+    Commands:
+    (enter) last command entered (step next)
+    (o) step over, (i) step into, (u) step out, (n) step next
+    (;) step instruction, (p) print instruction, (h) print this help, (q) quit
+
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    6: contract SimpleStorage {
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    47:     function setOutOfGas(uint input) public {
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                    ^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                                ^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                    ^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                    ^^^^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                    ^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                                ^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                    ^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                    ^^^^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                    ^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                                ^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                    ^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    50:             storedNum = input;
+                    ^^^^^^^^^^^^^^^^^
+
+    debug(develop:0xb03bb4f8...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    49:         while (true) {
+                ^^^^^^^^^^^^^^
     ```
