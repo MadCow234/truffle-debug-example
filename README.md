@@ -123,7 +123,7 @@ Usage:
     ```
 
     Output:
-    ```json
+    ```perl
     { tx: '0x8a7d3343dd2aaa0438157faae678ca57cc6485825bb4ed2ebefe90609dd268ce',
       receipt:
         { transactionHash: '0x8a7d3343dd2aaa0438157faae678ca57cc6485825bb4ed2ebefe90609dd268ce',
@@ -180,7 +180,7 @@ Debugging Issues:
     ```
 
     Output:
-    ```json
+    ```perl
     { tx: '0x8e2e8dcb787c45f43a772e25b697f2d9b72731faf1a878be9c1969d59e3c7512',
       receipt:
         { transactionHash: '0x8e2e8dcb787c45f43a772e25b697f2d9b72731faf1a878be9c1969d59e3c7512',
@@ -589,7 +589,7 @@ Debugging Issues:
     ```
     
     Output:
-    ```json
+    ```perl
     { tx: '0x40ae6048c3d633dffa4eb6e65af6eadb13e256fc9204bc917ab044052bf82787',
       receipt:
         { transactionHash: '0x40ae6048c3d633dffa4eb6e65af6eadb13e256fc9204bc917ab044052bf82787',
