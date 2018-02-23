@@ -172,6 +172,7 @@ Debugging Issues:
 ### Issue 1: Invalid Opcode
 
 1. This command calls the `setInvalidOpcode()` function with a value of `0`. The `setInvalidOpcode()` function throws an error on any value other than `0`. Since the function is called with a value of `0`, there was no error, and the output shows information regarding the transaction.  
+*Note: Notice that the last line contains a key/value pair for logs that currently has an empty value.*
 
     Input:
     ```javascript
@@ -191,7 +192,7 @@ Debugging Issues:
           contractAddress: null,
           logs: [],
           status: 1 },
-        logs: [] }
+      logs: [] }
     ```
 
 1. Call the `get()` function again and notice that the value returned is now `0`.
@@ -217,13 +218,13 @@ Debugging Issues:
     Output:
     ```
     Error: VM Exception while processing transaction: invalid opcode
-    at XMLHttpRequest._onHttpResponseEnd (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:509:1)
-    at XMLHttpRequest._setReadyState (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:354:1)
-    at XMLHttpRequestEventTarget.dispatchEvent (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:64:1)
-    at XMLHttpRequest.request.onreadystatechange (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\httpprovider.js:128:1)
-    at ...\npm\node_modules\truffle\build\webpack:\~\truffle-provider\wrapper.js:134:1
-    at ...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\requestmanager.js:86:1
-    at Object.InvalidResponse (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\errors.js:38:1)
+        at XMLHttpRequest._onHttpResponseEnd (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:509:1)
+        at XMLHttpRequest._setReadyState (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:354:1)
+        at XMLHttpRequestEventTarget.dispatchEvent (...\npm\node_modules\truffle\build\webpack:\~\xhr2\lib\xhr2.js:64:1)
+        at XMLHttpRequest.request.onreadystatechange (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\httpprovider.js:128:1)
+        at ...\npm\node_modules\truffle\build\webpack:\~\truffle-provider\wrapper.js:134:1
+        at ...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\requestmanager.js:86:1
+        at Object.InvalidResponse (...\npm\node_modules\truffle\build\webpack:\~\web3\lib\web3\errors.js:38:1)
     ```
 
 1. Return to the terminal that is attached to the Truffle development logging output (henceforth referred to as "the log terminal"). The log terminal now contains some lines of information regarding the transaction. Notice the transaction hash that is required for debugging is logged here, on the third line. Copy this transaction hash.  
@@ -259,7 +260,7 @@ Debugging Issues:
     Gathering transaction data...
 
     Addresses affected:
-    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+      0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
 
     Commands:
     (enter) last command entered (step next)
@@ -293,7 +294,7 @@ Debugging Issues:
     Gathering transaction data...
 
     Addresses affected:
-    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+      0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
 
     Commands:
     (enter) last command entered (step next)
@@ -350,7 +351,7 @@ Debugging Issues:
 
 ### Issue 2: Out-of-gas
 
-1. This command calls the `setOutOfGas()` function which contains an infinate loop. Calling this function will cause the transaction to use all of the allocated gas (which can be expensive) and will result in the code never executing. Notice that again, the output shows information regarding the error that was encountered and does not contain the transaction hash.
+1. This command calls the `setOutOfGas()` function, which contains an infinate loop. Calling this function will cause the transaction to use all of the allocated gas (which can be expensive since gas is Ether) and will result in the code never executing. Notice that again, the output shows information regarding the error that was encountered and does not contain the transaction hash.
 
     Input:
     ```javascript
@@ -399,7 +400,7 @@ Debugging Issues:
     Gathering transaction data...
 
     Addresses affected:
-    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+      0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
 
     Commands:
     (enter) last command entered (step next)
@@ -423,7 +424,7 @@ Debugging Issues:
     Gathering transaction data...
 
     Addresses affected:
-    0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+      0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
 
     Commands:
     (enter) last command entered (step next)
@@ -434,7 +435,7 @@ Debugging Issues:
     Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
 
     6: contract SimpleStorage {
-    ^^^^^^^^^^^^^^^^^^^^^^^^
+       ^^^^^^^^^^^^^^^^^^^^^^^^
 
     debug(develop:0xb03bb4f8...)>
 
@@ -455,7 +456,7 @@ Debugging Issues:
     Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
 
     49:         while (true) {
-                    ^^^^
+                       ^^^^
 
     debug(develop:0xb03bb4f8...)>
 
@@ -497,7 +498,7 @@ Debugging Issues:
     Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
 
     49:         while (true) {
-                    ^^^^
+                       ^^^^
 
     debug(develop:0xb03bb4f8...)>
 
@@ -539,7 +540,7 @@ Debugging Issues:
     Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
 
     49:         while (true) {
-                    ^^^^
+                       ^^^^
 
     debug(develop:0xb03bb4f8...)>
 
@@ -576,3 +577,170 @@ Debugging Issues:
     49:         while (true) {
                 ^^^^^^^^^^^^^^
     ```
+
+### Issue 3: Incorrect Event
+
+1. This command calls the `setIncorrectEvent()` function, which runs without error, but produces an unintended result. Notice that a transaction receipt is posted and it contains information inside the `logs` object. Inside the `logs` object is a `event` key. Notice that the value of `event` is `'Odd'` even though `4` was passed into the function, which is an even number. Copy the transaction hash.  
+*Note: The log terminal is not needed for this issue since the transaction completed successfully and a transaction hash was issued.*
+
+    Input:
+    ```javascript
+    SimpleStorage.deployed().then((instance)=>{return instance.setIncorrectEvent(4);});
+    ```
+    
+    Output:
+    ```javascript
+    { tx: '0x40ae6048c3d633dffa4eb6e65af6eadb13e256fc9204bc917ab044052bf82787',
+      receipt:
+        { transactionHash: '0x40ae6048c3d633dffa4eb6e65af6eadb13e256fc9204bc917ab044052bf82787',
+          transactionIndex: 0,
+          blockHash: '0xdb7873c57acdeb212857b109021a0bac859f20a07003b389d8c424bcdd5d23ae',
+          blockNumber: 5,
+          gasUsed: 42575,
+          cumulativeGasUsed: 42575,
+          contractAddress: null,
+          logs: [ [Object] ],
+          status: 1 },
+      logs:
+        [ { logIndex: 0,
+            transactionIndex: 0,
+            transactionHash: '0x40ae6048c3d633dffa4eb6e65af6eadb13e256fc9204bc917ab044052bf82787',
+            blockHash: '0xdb7873c57acdeb212857b109021a0bac859f20a07003b389d8c424bcdd5d23ae',
+            blockNumber: 5,
+            address: '0x345ca3e014aaf5dca488057592ee47305d9b3e10',
+            type: 'mined',
+            event: 'Odd',
+            args: {} } ] }
+    ```
+
+1. Debug the transaction using the transaction hash that was copied from the successful transaction report.
+
+    Input:
+    ```
+    debug 0x40ae6048c3d633dffa4eb6e65af6eadb13e256fc9204bc917ab044052bf82787
+    ```
+
+    Output:
+    ```
+    Note: This feature's in beta. Please discuss any issues you find in our Gitter channel!
+    https://gitter.im/ConsenSys/truffle
+
+    Gathering transaction data...
+
+    Addresses affected:
+      0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+
+    Commands:
+    (enter) last command entered (step next)
+    (o) step over, (i) step into, (u) step out, (n) step next
+    (;) step instruction, (p) print instruction, (h) print this help, (q) quit
+
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    6: contract SimpleStorage {
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+    ```
+
+1. Press **Enter** until the offending code is displayed, in this case, it is when the `'Odd'` event is triggered. Notice the line number of the conditional that leads to this event being triggered, since this is the offending code that needs to be fixed.
+
+    Output:
+    ```
+    Note: This feature's in beta. Please discuss any issues you find in our Gitter channel!
+    https://gitter.im/ConsenSys/truffle
+
+    Gathering transaction data...
+
+    Addresses affected:
+      0x345ca3e014aaf5dca488057592ee47305d9b3e10 - SimpleStorage
+
+    Commands:
+    (enter) last command entered (step next)
+    (o) step over, (i) step into, (u) step out, (n) step next
+    (;) step instruction, (p) print instruction, (h) print this help, (q) quit
+
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    6: contract SimpleStorage {
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    63:     function setIncorrectEvent(uint input) public {
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    64:         storedNum = input;
+                            ^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    64:         storedNum = input;
+                ^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    64:         storedNum = input;
+                ^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    66:         if (input % 2 == 0) {
+                                 ^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    66:         if (input % 2 == 0) {
+                            ^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    66:         if (input % 2 == 0) {
+                    ^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    66:         if (input % 2 == 0) {
+                    ^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    66:         if (input % 2 == 0) {
+                    ^^^^^^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    66:         if (input % 2 == 0) {
+                ^^^^^^^^^^^^^^^^^^^^^
+
+    debug(develop:0x40ae6048...)>
+
+    Store.sol | 0x345ca3e014aaf5dca488057592ee47305d9b3e10:
+
+    68:             Odd();
+                    ^^^^^
+    ```
+
+1.  Exit the debugger by entering **q**, then pressing **Enter**. Then exit the Truffle development shell by typing **.exit**.
