@@ -1,6 +1,7 @@
 truffle-debug-example
 =====================
-As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction. This project contains examples of different errors that will require the use of the debugger to locate and fix.
+As of version 4, Truffle has a built in debugger for stepping through the code that executes during a transaction. This project contains examples of different errors that will require the use of the debugger to locate and fix.    
+The examples in this project are a byproduct of completing a tutorial by Mike Pumphrey found [here](http://truffleframework.com/tutorials/debugging-a-smart-contract).
 
 Assumptions:
 ------------
